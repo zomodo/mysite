@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'mysite',
     'blog',
     'repositories',
+    'user',
+    'notifications',
+    'simpleui',
 
 ]
 
@@ -123,3 +126,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# 设置AUTH_USER_MODEL
+AUTH_USER_MODEL = 'user.UserInfo'

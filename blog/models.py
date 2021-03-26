@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.contrib.auth import get_user_model
 # Create your models here.
+user=get_user_model()
 
 class Category(models.Model):
     STATUS_NORMAL=1
@@ -14,7 +15,7 @@ class Category(models.Model):
     name=models.CharField(max_length=50,verbose_name='名称')
     status=models.PositiveIntegerField(choices=STATUS_ITEMS,default=1,verbose_name='状态')
     is_nav=models.BooleanField(default=False,verbose_name='是否为导航')
-    owner=models.ForeignKey(User,verbose_name='作者',on_delete=models.CASCADE)
+    owner=models.ForeignKey(user,verbose_name='作者',on_delete=models.CASCADE)
     created_time=models.DateTimeField(auto_now_add=True,verbose_name='创建时间')
 
     def __str__(self):
@@ -46,7 +47,7 @@ class Tag(models.Model):
 
     name=models.CharField(max_length=10,verbose_name='名称')
     status=models.PositiveIntegerField(choices=STATUS_ITEMS,default=1,verbose_name='状态')
-    owner=models.ForeignKey(User,verbose_name='作者',on_delete=models.CASCADE)
+    owner=models.ForeignKey(user,verbose_name='作者',on_delete=models.CASCADE)
     created_time=models.DateTimeField(auto_now_add=True,verbose_name='创建时间')
 
     def __str__(self):
@@ -72,7 +73,7 @@ class Post(models.Model):
     status=models.PositiveIntegerField(choices=STATUS_ITEMS,default=1,verbose_name='状态')
     category=models.ForeignKey(Category,verbose_name='分类',on_delete=models.DO_NOTHING)
     tag=models.ManyToManyField(Tag,verbose_name='标签')
-    owner=models.ForeignKey(User,verbose_name='作者',on_delete=models.DO_NOTHING)
+    owner=models.ForeignKey(user,verbose_name='作者',on_delete=models.DO_NOTHING)
     created_time=models.DateTimeField(auto_now_add=True,verbose_name='创建时间')
     last_update_time=models.DateTimeField(auto_now=True,verbose_name='最近更新时间')
     content_html=models.TextField(verbose_name='正文html代码',blank=True,editable=False)
@@ -122,5 +123,3 @@ class Post(models.Model):
     @classmethod
     def hot_posts(cls):
         return cls.objects.filter(status=cls.STATUS_NORMAL).only('id','title').order_by('-pv')
-
-
